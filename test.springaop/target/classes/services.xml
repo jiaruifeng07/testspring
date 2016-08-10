@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop  
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+	<!-- services -->
+	<bean name="myService" class="com.my.service.MyService" scope="prototype">
+		<property name="myDao" ref="myDao" />
+		<property name="myNewDao" ref="myNewDao" />
+		<!-- additional collaborators and configuration for this bean go here -->
+	</bean>
+	<bean id="helloWorldService" class="com.my.service.HelloWorldService" />
+	<bean id="aspect" class="com.my.HelloWorldAspect" />
+	<aop:config>
+		<aop:pointcut id="pointcut" expression="execution(* com.my.service..*.*(..))" />
+		<aop:aspect ref="aspect">
+			<aop:before pointcut-ref="pointcut" method="beforeAdvice" />
+			<aop:after pointcut="execution(* com.my.service..*.*(..))"
+				method="afterFinallyAdvice" />
+			<aop:around pointcut-ref="pointcut" method="around" />
+		</aop:aspect>
+	</aop:config>
+</beans>
